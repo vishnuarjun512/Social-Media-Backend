@@ -2,7 +2,7 @@
 
 With NodeJS and ExpressJS , an API that lets a Frontend Application have all the functionality API calls to develop a Social Networking app
 
-This is a [Full Stack Project](https://github.com/vishnuarjun512/Social-Media-Backend) project bootstrapped with [`NodeJS`]
+This is a [Full Stack Project](https://github.com/vishnuarjun512/Social-Media-Backend) project bootstrapped with [`NodeJS`] hosted on RENDER here(https://social-media-backend-2dqa.onrender.com)
 
 ## Clone
 
@@ -35,6 +35,12 @@ npm run dev
 [http://localhost:3000/](http://localhost:5173/) is where the Backend Server is Running.
 
 ## Documentation for all the API Calls
+
+### For Hosted Documentation
+
+Open [https://social-media-backend-2dqa.onrender.com/api-docs/](https://social-media-backend-2dqa.onrender.com/api-docs/) with your browser to see the documentation.
+
+### For Local Deployed Documentation
 
 Open [http://localhost:3000/api-docs](http://localhost:3000/api-docs) with your browser to see the documentation.
 
