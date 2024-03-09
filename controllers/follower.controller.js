@@ -130,6 +130,7 @@ export const likePost = async (req, res) => {
       { _id: postId },
       {
         $push: { likes: userId },
+        $inc: { likesCount: 1 },
       },
       { new: true }
     );
@@ -167,6 +168,7 @@ export const unlikePost = async (req, res) => {
       { _id: postId },
       {
         $pull: { likes: userId },
+        $inc: { likesCount: -1 },
       },
       { new: true }
     );
@@ -196,6 +198,7 @@ export const comment = async (req, res) => {
             comment,
           },
         },
+        $inc: { commentsCount: 1 },
       },
       { new: true }
     );
@@ -222,6 +225,7 @@ export const uncomment = async (req, res) => {
         $pull: {
           comments: { comment },
         },
+        $inc: { commentsCount: -1 },
       },
       { new: true }
     );
