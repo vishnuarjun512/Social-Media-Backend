@@ -257,15 +257,19 @@ export const getFollowers = async (req, res) => {
     const followers = user.followers;
 
     if (followers.length == 0) {
-      const limitUsersWhenZero = followers.slice(0, limit);
       return res.status(200).json({
         error: false,
         message: "No Followers",
-        data: limitUsersWhenZero,
+        data: [],
       });
     }
 
-    const filteredFollowers = followers.slice(startIndex, endIndex);
+    const filteredFollowers = await User.aggregate([
+      { $match: { _id: { $in: followers } } },
+      { $sort: { createdAt: -1 } },
+      { $skip: startIndex },
+      { $limit: limit },
+    ]);
 
     return res.status(200).json({
       error: false,
