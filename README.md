@@ -43,6 +43,6 @@ Open [http://localhost:3000/api-docs](http://localhost:3000/api-docs) with your 
 For Unit testing the Tests that are present in the Tests Folder.
 
 ```bash
-# Run the Backend Server
+# Run all the Tests in the Tests folders
  npm test
 ```
