@@ -294,15 +294,18 @@ export const getFollowing = async (req, res) => {
     const followings = user.following;
 
     if (followings.length == 0) {
-      const limitUsersWhenZero = followings.slice(0, limit);
       return res.status(200).json({
         error: false,
         message: "No Following",
-        data: limitUsersWhenZero,
+        data: [],
       });
     }
 
-    const filteredFollowings = followings.slice(startIndex, endIndex);
+    const filteredFollowings = await User.aggregate([
+      { $match: { _id: { $in: followings } } },
+      { $sort: { createdAt: -1 } },
+      { $skip: startIndex },
+    ]);
 
     return res.status(200).json({
       error: false,
@@ -326,16 +329,26 @@ export const getFollowingPosts = async (req, res) => {
     const endIndex = page * limit;
 
     // Get the list of users that the current user is following
-    const following = await Follow.findOne({ userRef: userId });
-    const followedUsers = following.following;
+    const listofFollowing = await Follow.findOne({ userRef: userId });
+    if (!listofFollowing) {
+      return res
+        .status(201)
+        .json({ error: true, message: "No Followings & Followers" });
+    }
+
+    const followedUsers = listofFollowing.following;
 
     // Aggregate posts from followed users sorted by most recent
     const posts = await Post.aggregate([
       {
-        $match: { userRef: { $in: followedUsers } }, // Match posts by followed users
+        $match: { userRef: { $in: followedUsers } },
       },
       {
         $sort: { createdAt: -1 }, // Sort posts by most recent
+      },
+      { $skip: startIndex },
+      {
+        $limit: limit,
       },
     ]);
 
@@ -345,20 +358,12 @@ export const getFollowingPosts = async (req, res) => {
         message: "No Posts",
         data: [],
       });
-    } else if (posts.length < limit) {
-      return res.status(200).json({
-        error: false,
-        message: "All Posts",
-        data: posts,
-      });
     }
-
-    const limitedPosts = posts.slice(startIndex, endIndex);
 
     res.status(200).json({
       error: false,
       message: "All Posts",
-      data: limitedPosts,
+      data: posts,
     });
   } catch (error) {
     console.error(error);
@@ -388,16 +393,14 @@ export const getUserPosts = async (req, res) => {
       return res.status(200).json({
         error: false,
         message: "No Posts",
-        data: [],
+        data: posts,
       });
     }
-
-    const limitedPosts = posts.slice(startIndex, endIndex);
 
     res.status(200).json({
       error: false,
       message: "All Posts",
-      data: limitedPosts,
+      data: posts,
     });
   } catch (error) {
     console.error(error);
