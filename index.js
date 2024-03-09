@@ -29,7 +29,7 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
   try {
-    res.status(200).json({ message: "Test Done" });
+    res.status(200).json({ message: "Welcome to Social media API" });
   } catch (error) {
     res.status(404).json({ message: "Test Failed" });
   }
